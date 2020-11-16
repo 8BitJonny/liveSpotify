@@ -74,7 +74,7 @@ def barGen(barCount):
     for i in range(1, barCount + 1):
         anim = random.randint(1000, 1350)
         barCSS += (
-            ".bar:nth-child({})  {{ left: {}px; animation-duration: {}ms; }}".format(
+            ".bar:nth-child({})  {{ left: {}px; height: 8px; animation-duration: {}ms; }}".format(
                 i, left, anim
             )
         )
@@ -89,19 +89,19 @@ def loadImageB64(url):
 
 def makeSVG(data):
     barCount = 84
-    contentBar = "".join(["<div class='bar'></div>" for i in range(barCount)])
     barCSS = barGen(barCount)
 
     if data == {} or data["item"] == "None":
-        # contentBar = "" #Shows/Hides the EQ bar if no song is currently playing
-        currentStatus = "Was playing:"
+        contentBar = "".join(["<div class='bar'></div>" for i in range(barCount)])
+        currentStatus = "Currently offline. Last song played"
         recentPlays = recentlyPlayed()
         recentPlaysLength = len(recentPlays["items"])
         itemIndex = random.randint(0, recentPlaysLength - 1)
-        item = recentPlays["items"][itemIndex]["track"]
+        item = recentPlays["items"][recentPlaysLength - 1]["track"]
     else:
+        contentBar = "".join(["<div class='bar active'></div>" for i in range(barCount)])
         item = data["item"]
-        currentStatus = "Vibing to:"
+        currentStatus = "Currently vibing to 🎶"
     image = loadImageB64(item["album"]["images"][1]["url"])
     artistName = item["artists"][0]["name"].replace("&", "&amp;")
     songName = item["name"].replace("&", "&amp;")
